@@ -1,0 +1,23 @@
+{
+  "project_type": "Next.js 14 React PWA with Supabase backend and TypeScript",
+  "language": "TypeScript / TSX",
+  "build_system": "Next.js (npm run build, npm run dev)",
+  "test_framework": "None configured; manual testing via dev server",
+  "build_command": "npm run build",
+  "test_command": "npm run build (only validation available)",
+  "verification_instructions": "1. Run `npm run build` to verify no TypeScript/build errors. 2. Start dev server with `npm run dev` and manually test each feature via browser. 3. Verify localStorage persistence across page reloads. 4. Test keyboard shortcuts (Ctrl+Z, Ctrl+Shift+Z, Ctrl+F on Windows; Cmd variants on Mac).",
+  "snapshot_or_generated_files": null,
+  "environment_constraints": "App uses Supabase (configured via env vars). Undo/redo snapshots stored in localStorage. Export uses browser Download API (requires user interaction). Search is client-side only. No server-side changes needed.",
+  "contribution_requirements": "Follow existing code patterns: use usePlanner() context hook for state, show toasts for user feedback via showToast(), persist state to localStorage, sync to Supabase if user is logged in. Use lucide-react icons. Follow Tailwind CSS utility class style (bg-court, text-ink, etc.) from existing codebase.",
+  "key_patterns": "1. Store: All state centralized in PlannerContext (src/lib/storage/store.tsx). Actions are named functions that update state and call showToast() and syncToSupabase(). 2. Modals: SettingsModal, AuthModal, ProfileModal follow same structure (isOpen prop, onClose callback, bg-card / border-2 border-ink / rounded-card styling). 3. Components: Use Tailwind utility classes (no custom CSS). Icons from lucide-react. State lifted to context or component useState. 4. UI: Desktop sidebar (left rail ~260px), center content, optional right panel on XL+. Mobile: bottom tab bar with raised center '+' button. 5. Persistence: All state saved to localStorage on change, synced to Supabase if user logged in.",
+  "relevant_files": [
+    "src/lib/storage/store.tsx (core store with all state and actions)",
+    "src/components/layout/AppShell.tsx (keyboard shortcuts, global navigation)",
+    "src/components/modals/SettingsModal.tsx (settings UI, tabs)",
+    "src/lib/utils/time.ts (existing utilities pattern)",
+    "src/types/database.ts (data type definitions)",
+    "src/lib/constants/defaults.ts (constants)",
+    "package.json (dependencies: lucide-react, date-fns, etc.)"
+  ],
+  "directory_structure": "src/ — app/ (Next.js routes and API), components/ (ui/, modals, layout, tabs), lib/ (storage/store, utils/, constants/, supabase/), types/ (database.ts). All state in store.tsx. All UI components in components/. All utilities in lib/utils/."
+}

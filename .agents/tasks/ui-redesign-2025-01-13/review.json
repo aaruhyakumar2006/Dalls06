@@ -1,0 +1,126 @@
+{
+  "verdict": "CHANGES_REQUESTED",
+  "findings": [
+    {
+      "severity": "blocker",
+      "file": "src/components/tabs/TodayTab.tsx",
+      "issue": "Tab still uses old sports-themed design system (bg-court, shadow-sticker, border-2 border-ink) instead of new warm color palette",
+      "evidence": "Line 402 and throughout: Uses `bg-court text-white shadow-[0_2px_0_#141B3D]` pattern. Grep search confirms extensive old design usage.",
+      "consequence": "User sees old design in main content area. None of the approved modern card-based UI is visible in TodayTab.",
+      "correction": "Replace all old design tokens (bg-court → bg-primary, shadow-sticker → shadow-card-soft, border-2 border-ink → Card component). Import and use Card, StatCard, ProgressRing components. Add greeting header with time-based message and progress ring. Wrap task items in Card components with rounded-card-xl."
+    },
+    {
+      "severity": "blocker",
+      "file": "src/components/tabs/PlanTab.tsx",
+      "issue": "Tab still uses old sports-themed design system throughout",
+      "evidence": "Lines 195, 205, 215, 225: Tab buttons use `bg-court shadow-[0_2px_0_#141B3D]`. Lines 239, 263, 472, 582: Cards use `border-2 border-ink shadow-sticker`. Lines 253, 419, 651: Buttons use old styling.",
+      "consequence": "User sees old design in schedule planning interface. Weekly calendar cards, checklist items, and forms do not match approved modern design.",
+      "correction": "Update all tabs to use new design (schedule/checklists/startups/weeklyReview). Replace button styling with rounded-pill active states using bg-primary. Wrap schedule cards, checklist items, and forms in Card components. Update color palette throughout."
+    },
+    {
+      "severity": "blocker",
+      "file": "src/components/tabs/ReviewTab.tsx",
+      "issue": "Tab still uses old sports-themed design system",
+      "evidence": "Line 83: Badge uses `bg-court`. Line 98: Add button uses `bg-court border-2 border-ink shadow-sticker`. Line 108: Form uses `border-2 border-ink shadow-sticker`. Line 236: Review items use `border-2 border-ink shadow-sticker`.",
+      "consequence": "User sees old design in spaced review interface. Review cards do not have modern elevated card appearance with stage indicators.",
+      "correction": "Replace badge with `bg-primary rounded-pill`. Update add button to use `bg-primary rounded-xl shadow-card-soft`. Wrap review items in Card components with elevated variant. Add stage progress dots with modern styling."
+    },
+    {
+      "severity": "blocker",
+      "file": "src/components/tabs/AnalyticsTab.tsx",
+      "issue": "Tab still uses old sports-themed design system",
+      "evidence": "Lines 168, 237, 319, 400: All sections use `border-2 border-ink shadow-sticker`. Lines 171, 240, 322, 403: Icons use `text-court`. Line 253: Best time badges use `bg-court/20 border-court text-court`.",
+      "consequence": "User sees old design in analytics dashboard. No StatCard components visible. Hero metrics not displayed with modern card design.",
+      "correction": "Add hero stats section with StatCard grid showing completion rate, streak, weekly total. Wrap all chart sections in Card components. Update colors throughout (court → primary, smash → secondary). Use new badge styling with rounded-pill and primary colors."
+    },
+    {
+      "severity": "blocker",
+      "file": "src/components/tabs/TrackTab.tsx",
+      "issue": "Tab still uses old sports-themed design system (assumed based on pattern)",
+      "evidence": "Not shown in grep output but pattern consistent with other tabs.",
+      "consequence": "User sees old design in tracking interface. StatCard components for DSA topics, aptitude accuracy, and sleep metrics not integrated.",
+      "correction": "Add StatCard hero metrics at top of each sub-tab (DSA/Aptitude/Sleep/Sport). Wrap topic cards, charts, and log entries in Card components. Replace all old color tokens with new palette. Add sleep chart with rounded bars and color-coded height indicators."
+    },
+    {
+      "severity": "blocker",
+      "file": "src/components/tabs/AssistantTab.tsx",
+      "issue": "Tab still uses old sports-themed design system (assumed based on pattern)",
+      "evidence": "Not shown in grep output but pattern consistent with other tabs.",
+      "consequence": "User sees old design in AI assistant interface. Chat bubbles not properly styled with rounded corners and color differentiation (user=teal right-aligned, AI=gray left-aligned).",
+      "correction": "Add AI avatar card with gradient background from accent-purple to primary. Update chat bubbles: user messages right-aligned with `bg-primary text-white rounded-tl-2xl rounded-tr-2xl rounded-bl-2xl rounded-br-sm`, AI messages left-aligned with `bg-gray-200 text-text-charcoal rounded-tl-sm rounded-tr-2xl rounded-bl-2xl rounded-br-2xl`. Update input bar to rounded-pill with shadow-card-soft."
+    },
+    {
+      "severity": "blocker",
+      "file": "src/components/tabs/*.tsx (all 6 tabs)",
+      "issue": "Card components created but never imported or used in any tab",
+      "evidence": "Grep search for `import.*Card|import.*StatCard|import.*EmptyState` in all *Tab.tsx files: NO MATCHES FOUND. Card.tsx, StatCard.tsx, EmptyState.tsx, ProgressRing.tsx exist but are not integrated.",
+      "consequence": "Reusable component system not leveraged. Design inconsistency. Users do not see modern card-based layout. All styling is inline with old design tokens.",
+      "correction": "Import Card, StatCard, EmptyState, ProgressRing in all tab files. Replace inline card styling with Card component wrappers. Use StatCard for metrics display. Add EmptyState for zero-data scenarios."
+    },
+    {
+      "severity": "blocker",
+      "file": "src/components/modals/SettingsModal.tsx",
+      "issue": "Modal still uses old design system",
+      "evidence": "Line 236: Backdrop uses `bg-ink/60 backdrop-blur-xs` instead of `bg-black/40 backdrop-blur-md`. Container likely uses old border-2 border-ink pattern.",
+      "consequence": "Settings modal appears inconsistent with updated AuthModal. Users see visual inconsistency when opening different modals.",
+      "correction": "Update backdrop to `bg-black/40 backdrop-blur-md`. Update container to `bg-white rounded-card-xl p-6 shadow-card-hover`. Update all buttons to use `bg-primary rounded-xl` with scale-98 active state. Update toggle switches to modern rounded-pill design. Follow AuthModal pattern."
+    },
+    {
+      "severity": "blocker",
+      "file": "src/components/modals/ProfileModal.tsx",
+      "issue": "Modal still uses old design system",
+      "evidence": "Line 123: Backdrop uses `bg-ink/60 backdrop-blur-xs` instead of `bg-black/40 backdrop-blur-md`.",
+      "consequence": "Profile modal inconsistent with updated AuthModal.",
+      "correction": "Update backdrop to `bg-black/40 backdrop-blur-md`. Update container to `bg-white rounded-card-xl p-6 shadow-card-hover`. Update form inputs to rounded-xl with primary focus rings. Update save button to primary gradient with shadow-card-soft. Follow AuthModal pattern."
+    },
+    {
+      "severity": "blocker",
+      "file": "src/components/modals/FocusTimerModal.tsx",
+      "issue": "Modal still uses old design system",
+      "evidence": "Line 124: Backdrop uses `bg-ink/60 backdrop-blur-xs`. Line 126: Container uses `border-2 border-ink shadow-sticker`.",
+      "consequence": "Focus timer modal inconsistent with updated AuthModal. Timer presets and start button do not have modern pill-shaped styling.",
+      "correction": "Update backdrop to `bg-black/40 backdrop-blur-md`. Update container to `bg-white rounded-card-xl p-6 shadow-card-hover`. Update timer presets to pill-shaped buttons with `rounded-pill` and `bg-primary` active state. Update start button to large primary gradient with rounded-xl. Add pulse animation when ready."
+    },
+    {
+      "severity": "blocker",
+      "file": "src/components/modals/WeeklyScheduleModal.tsx",
+      "issue": "Modal still uses old design system extensively",
+      "evidence": "Line 275: Backdrop `bg-ink/70 backdrop-blur-xs`. Line 282: Container `border-2 border-ink shadow-sticker`. Line 290: Header icon `bg-court border-2 border-ink`. Lines 350, 364, 375: Nav tabs use `bg-court border-2 border-ink shadow-[0_2px_0_#141B3D]`. Lines 398, 408, 418: Day type buttons use `bg-court shadow-sticker-sm`. Multiple other old styling instances.",
+      "consequence": "Large complex modal completely out of sync with new design. Users see old sports theme when editing weekly schedule.",
+      "correction": "Update backdrop to `bg-black/40 backdrop-blur-md`. Update container to `bg-white rounded-card-xl shadow-card-hover`. Update all navigation tabs to rounded-pill with `bg-primary` active state. Update all buttons (clear, add block, apply) to use `bg-primary rounded-xl shadow-card-soft`. Update block cards to use Card component or rounded-xl with soft shadows. Replace all bg-court with bg-primary, bg-mint with bg-success, bg-smash with bg-secondary."
+    },
+    {
+      "severity": "blocker",
+      "file": "src/components/layout/AppShell.tsx",
+      "issue": "Desktop right panel still uses old design system",
+      "evidence": "Line 606: Due reviews card uses `rounded-card border-2 border-ink bg-bg shadow-sticker`. Line 647: Task list card uses `rounded-card border-2 border-ink bg-bg shadow-sticker`.",
+      "consequence": "Visual inconsistency in desktop layout. Right panel shows old design while left rail shows new design.",
+      "correction": "Update due reviews card and task list card to use Card component or new styling: `bg-white rounded-card-xl shadow-card-soft border-0`. Remove border-2 border-ink pattern and replace with soft shadow elevation."
+    },
+    {
+      "severity": "blocker",
+      "file": "src/components/tabs/*.tsx (all 6 tabs)",
+      "issue": "Empty states not integrated despite EmptyState component being created",
+      "evidence": "EmptyState.tsx exists with correct implementation, but grep search shows no imports in any tab file. No empty state rendering for zero-data scenarios.",
+      "consequence": "Poor UX for new users or empty sections. No friendly illustrations or encouragement when tabs have no data.",
+      "correction": "Import EmptyState in each tab. Add conditional rendering: if no tasks/reviews/data, show EmptyState with appropriate icon, heading, subtext, and CTA. Examples: TodayTab (Calendar icon, 'Ready for a productive day?'), ReviewTab (Trophy icon, 'All caught up!'), TrackTab (Code icon, 'Start tracking your practice'), AnalyticsTab (BarChart icon, 'Your insights will appear here')."
+    },
+    {
+      "severity": "blocker",
+      "file": "N/A - Testing",
+      "issue": "No responsive testing performed across required viewports",
+      "evidence": "Plan requires testing on 320px, 375px, 768px, 1024px, 1440px, 1920px. No test results documented in implementation-status.md or completion-summary.md.",
+      "consequence": "Unknown if redesigned components (AppShell nav, AuthModal) work correctly on all screen sizes. Potential layout breaks undiscovered.",
+      "correction": "Test all updated components across all required viewports using Chrome DevTools device emulation or actual devices. Verify: navigation works, modals are usable, no overflow issues, text is readable, touch targets are 44px minimum. Document results."
+    },
+    {
+      "severity": "blocker",
+      "file": "N/A - Testing",
+      "issue": "No functionality regression testing performed",
+      "evidence": "Plan requires 20-item checklist covering auth, tasks, reviews, tracking, analytics, AI assistant, offline, notifications, theme, shortcuts, profile, settings. No evidence of manual testing documented.",
+      "consequence": "Unknown if existing features still work correctly after design changes. Build passes but user workflows not verified.",
+      "correction": "Execute full 20-item regression checklist from plan Phase 6 Item 18. Test: sign in/out, add/edit/delete tasks, toggle completion, drag-drop, focus timer, spaced reviews, DSA/aptitude/sleep/sport tracking, checklists, weekly review, analytics charts, AI assistant, offline sync, notifications, theme toggle, keyboard shortcuts, profile editing, settings. Document pass/fail for each item."
+    }
+  ],
+  "reviewDoc": "e:\\personal todo\\.agents\\tasks\\ui-redesign-2025-01-13\\review.md"
+}

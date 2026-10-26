@@ -1,0 +1,16 @@
+{
+  "verdict": "CHANGES_REQUESTED",
+  "findings": [
+    {
+      "id": "BLOCKER-1",
+      "severity": "BLOCKER",
+      "title": "Missing Review Tab in Mobile Bottom Navigation",
+      "location": "src/components/layout/AppShell.tsx:702-761",
+      "description": "Bottom navigation only has 4 tabs (Today, Plan, Track, Analytics) + center Plus button. The Review tab is missing from mobile navigation but exists in desktop navigation. Users cannot access the spaced review feature on mobile devices.",
+      "evidence": "Desktop navigation (lines 326-352) includes Review tab with badge showing dueReviewItemsCount. Mobile navigation (lines 707-760) only has Today, Plan, Track, Analytics tabs.",
+      "impact": "Users cannot access the core spaced review feature (with due items needing attention) on mobile devices. Feature parity broken between desktop and mobile.",
+      "correction": "Add a 5th tab button for Review after Analytics in bottom navigation (around line 760). Should use RotateCw icon, text-primary when active, text-gray-400 when inactive, display badge when dueReviewItemsCount > 0, onClick setCurrentTab('review'), aria-label='Review', and min-h-[44px] min-w-[44px] touch target."
+    }
+  ],
+  "reviewDoc": "e:\\personal todo\\.agents\\tasks\\review.md"
+}

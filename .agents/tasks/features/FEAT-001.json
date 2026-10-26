@@ -1,0 +1,35 @@
+{
+  "id": "FEAT-001",
+  "type": "feat",
+  "description": "Implement Undo/Redo system. Add fixed-size history stack (max 50 actions) to store.tsx, tracking snapshots of app state after mutations. Expose undo(), redo(), canUndo, canRedo from PlannerContext. Add Ctrl+Z / Cmd+Z and Ctrl+Shift+Z / Cmd+Shift+Z keyboard shortcuts. Add undo/redo buttons in AppShell desktop footer and mobile. Persist undo/redo stack to localStorage.",
+  "status": "pending",
+  "steps": [
+    "Add UndoRedoState and AppSnapshot types to src/lib/storage/store.tsx. Initialize undoRedoState useState hook with empty past/future and current state as present.",
+    "Create captureSnapshot() helper to capture current app state (dayLogs, completions, tasks, reviewItems, sleepLogs, focusSessions, dsaTopics, aptitudeLogs, sportLogs, checklistItems, startups, weeklyReviews). Create recordAction() wrapper function to capture snapshot after each state mutation.",
+    "Implement undo() and redo() functions. Undo: move present to future, pop from past as new present, restore state from snapshot. Redo: move present to past, pop from future as new present, restore state from snapshot. Handle empty history gracefully.",
+    "Wrap key mutation functions with recordAction(): toggleBlock, addTask, deleteTask, toggleTask, updateTask, reorderTasks, moveTask, recordReviewResult, recordDsaPractice, toggleChecklistItem, saveSleepLog, logFocusSession, addAptitudeLog, addSportLog, saveStartup, saveWeeklyReview.",
+    "Add undo/redo state to PlannerContextType. Export undo, redo, canUndo (past.length > 0), canRedo (future.length > 0) from context provider.",
+    "Persist undoRedoState to localStorage in existing persistence useEffect. Load undoRedoState from localStorage on app boot.",
+    "Update src/components/layout/AppShell.tsx: Import undo, redo, canUndo, canRedo from usePlanner(). Add undo/redo buttons in desktop footer (left side, beside theme toggle). Add Ctrl+Z / Cmd+Z and Ctrl+Shift+Z / Cmd+Shift+Z keyboard shortcuts in global keyboard handler (skip if input is focused). Import Undo and Redo icons from lucide-react.",
+    "Test: Create task, verify undo button enabled, click undo, verify task gone. Redo, verify back. Test keyboard shortcuts. Verify localStorage persists 50-action history across page reload."
+  ],
+  "acceptance_criteria": [
+    "Undo/redo buttons appear in AppShell desktop footer and are disabled when no history",
+    "Ctrl+Z / Cmd+Z triggers undo; Ctrl+Shift+Z / Cmd+Shift+Z triggers redo",
+    "Undo reverses state: task creation, task deletion, block toggles, review results, etc.",
+    "Redo restores undone state",
+    "History capped at 50 actions (oldest actions discarded when limit exceeded)",
+    "Undo/redo stack persists to localStorage and loads on app boot",
+    "No TypeScript build errors; `npm run build` succeeds"
+  ],
+  "verification": [
+    "npm run build — no TypeScript errors",
+    "npm run dev — dev server starts",
+    "Manual: Create task, click undo button (or Ctrl+Z), verify task deleted. Click redo, verify task restored.",
+    "Manual: Toggle block, undo, verify toggle undone. Redo, verify toggle restored.",
+    "Manual: Create 51 tasks, undo 50 times, verify first 50 are undone and 51st remains (history capped).",
+    "Manual: Refresh page, verify undo/redo history persists."
+  ],
+  "blocked_reason": null,
+  "findings": ""
+}

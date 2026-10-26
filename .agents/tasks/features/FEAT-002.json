@@ -1,0 +1,39 @@
+{
+  "id": "FEAT-002",
+  "type": "feat",
+  "description": "Implement Data Export feature. Create src/lib/utils/export.ts with three export formats: JSON (full state backup), CSV (tasks and block completions tables), PDF (pretty weekly summary). Add 'Export Data' section to SettingsModal Account tab with three export buttons. Use browser Download API (URL.createObjectURL + a element click). Include metadata (export date, timezone, app version) in all exports.",
+  "status": "pending",
+  "steps": [
+    "Create src/lib/utils/export.ts. Define ExportPayload interface (timestamp, timezone, appVersion, dayLogs, tasks, reviewItems, dsaTopics, checklistItems, sleepLogs, aptitudeLogs, startups, weeklyReviews).",
+    "Implement getExportFilename(format: 'json' | 'csv' | 'pdf'): string — returns 'daily-planner-export-YYYY-MM-DD.{format}' with today's date.",
+    "Implement downloadFile(content: string, filename: string, mimeType: string): void — creates blob, URL.createObjectURL, creates a element, clicks, revokes URL.",
+    "Implement exportAsJSON(payload: ExportPayload): void — JSON.stringify with 2-space indent, call downloadFile with application/json MIME type.",
+    "Implement exportAsCSV(tasks: TaskItem[], templates: BlockTemplate[]): void — format tasks as CSV with headers (Date, Title, Time, Duration, Status), call downloadFile with text/csv.",
+    "Implement exportBlockCompletionsCSV(completions, templates): void — format block completions as CSV with headers (Date, Block Time, Block Label, Block Kind, Status), call downloadFile.",
+    "Implement exportAsPDF(payload: ExportPayload): void — call generatePDFHTML() to create HTML with metadata and tables, create blob, download as HTML (browser will print as PDF).",
+    "Implement generatePDFHTML(payload): string — return HTML string with inline CSS styling, metadata section, recent tasks table (first 20), sleep log table (last 14 days).",
+    "Update src/components/modals/SettingsModal.tsx: Add 'export' to activeTab useState and tab button grid. Add new tab content for export with three sections (JSON, CSV, PDF buttons). Each button calls corresponding export function with state from usePlanner. Show success toast on export.",
+    "Test: Open Settings > Export tab. Click each export button. Verify files download with correct names, metadata, and content (JSON valid JSON, CSV valid CSV, PDF valid HTML)."
+  ],
+  "acceptance_criteria": [
+    "Export Data tab appears in SettingsModal alongside existing tabs (Timetable, Push, Targets, Account)",
+    "JSON export downloads as 'daily-planner-export-YYYY-MM-DD.json' with valid JSON content including metadata",
+    "Tasks CSV exports as 'daily-planner-export-YYYY-MM-DD.csv' with headers and task rows",
+    "Block Completions CSV exports with headers and completion rows",
+    "PDF export downloads as 'daily-planner-export-YYYY-MM-DD.pdf' (HTML) with metadata, tasks table, and sleep log table",
+    "Exports include timestamp (ISO 8601), timezone, app version in metadata",
+    "Clicking export buttons shows success toast",
+    "No TypeScript build errors; `npm run build` succeeds"
+  ],
+  "verification": [
+    "npm run build — no TypeScript errors",
+    "npm run dev — dev server starts",
+    "Manual: Open Settings > Export tab, click 'Download JSON', verify file downloads with correct name and valid JSON content (opens in text editor, is valid JSON)",
+    "Manual: Click 'Download Tasks CSV', verify file downloads with correct name and CSV structure (opens in Excel/Sheets, shows headers and rows)",
+    "Manual: Click 'Download Blocks CSV', verify file downloads with correct name and CSV structure",
+    "Manual: Click 'Download PDF', verify file downloads with correct name and HTML content (includes metadata, tables)",
+    "Manual: Open downloaded JSON in text editor, verify 'timestamp', 'timezone', 'appVersion' fields present"
+  ],
+  "blocked_reason": null,
+  "findings": ""
+}

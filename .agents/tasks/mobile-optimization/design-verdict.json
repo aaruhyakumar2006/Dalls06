@@ -1,0 +1,48 @@
+{
+  "verdict": "CHANGES_REQUESTED",
+  "findings": [
+    {
+      "severity": "HIGH",
+      "area": "Store API Implementation",
+      "issue": "Design prescribes new fields (pendingMutationsCount, pendingMutations, lastSyncTimestamp, retryPendingMutations) but doesn't specify initialization logic, serialization, or how these computed values derive from existing pendingChanges array. Current store.tsx has no such fields.",
+      "recommendation": "Add implementation spec to Section 5A defining: (1) pendingMutationsCount = useMemo(() => pendingChanges.length), (2) pendingMutations = computed mapping of first 5 items for SettingsModal display, (3) lastSyncTimestamp = set to Date.now() after successful sync batch, (4) retryPendingMutations = calls existing processPending logic. All should be serialized to localStorage."
+    },
+    {
+      "severity": "HIGH",
+      "area": "Keyboard Detection Fallback",
+      "issue": "Section 3B specifies '-300px' margin fallback for devices without visualViewport but doesn't justify this magic number, define test device requirements, or explain how fallback robustness is verified. No guidance on debounce application to fallback path.",
+      "recommendation": "Clarify fallback strategy: (1) Document why -300px is used or switch to 100% viewport height (safer). (2) Add to Task 3 pre-implementation checklist: measure window.innerHeight before/after keyboard open on real unsupported device. (3) Specify that fallback is 'imperfect' and may not work on all devices; recommend testing on iPhone SE (375px width) and Android 360px device before deployment."
+    },
+    {
+      "severity": "MEDIUM",
+      "area": "Pull-to-Refresh Gesture Activation",
+      "issue": "Section 4C defines condition 'scrollContainer.scrollTop === 0' but doesn't specify tolerance (exact 0 or <=5px?), monitoring mechanism (passive listener?), visual trigger thresholds ('80% drag distance' is ambiguous: 80px? device-dependent?), or momentum scroll behavior.",
+      "recommendation": "Add implementation pseudocode: tolerance scrollTop <= 5px, trigger pull-to-refresh at 80px pull distance (pixels), show 'Release to Sync' prompt at 80px threshold, implement via touchmove/touchend listeners on scroll container. Clarify that momentum scroll is not handled (user must explicitly drag, not flick)."
+    },
+    {
+      "severity": "MEDIUM",
+      "area": "Drag State Detection Future-Proofing",
+      "issue": "Section 8 specifies drag-state detection for TodayTab only, but design doesn't clarify what happens if future tabs (e.g., PlanTab, AnalyticsTab) add dnd-kit. Also doesn't address horizontal scroll within tabs (e.g., scrollable chart) potentially conflicting with swipe navigation.",
+      "recommendation": "Add to Section 4A: 'Rule 1: If ANY dnd-kit drag is active globally, disable swipe. Rule 2: If user is horizontally scrolling within a tab, disable swipe. Future tabs MUST implement isDraggingRef pattern and test swipe+drag conflicts on actual device before merging.'"
+    },
+    {
+      "severity": "MEDIUM",
+      "area": "Autofocus Timing Race Condition",
+      "issue": "Section 3C/7C specifies onTransitionEnd callback but doesn't address race conditions: input may not exist yet if modal has async child components, or modal may not have CSS transitions. No fallback or retry strategy documented.",
+      "recommendation": "Provide robust implementation: check if first input exists after onTransitionEnd fires; if not found, add retry with RAF or short timeout (max 500ms). Log warnings if autofocus fails. Include CSS requirement: .modal-container must have transition property (opacity/transform)."
+    },
+    {
+      "severity": "MEDIUM",
+      "area": "Service Worker Cache Invalidation",
+      "issue": "Section 5C shows cache strategies (network-first, stale-while-revalidate, cache-first) but doesn't specify TTL for API responses, max cache size limit, or cleanup strategy when quota exceeded. CACHE_NAME versioning is only mentioned in comment, not formalized.",
+      "recommendation": "Add to Section 5C: 'CACHE_NAME = 'daily-planner-v1-YYYY-MM' (increment on deploy for automatic invalidation). API response TTL: 5 minutes (stale-while-revalidate). Max cache size: 50MB. Query params cached separately (correct for per-user data). On storage quota exceeded, browser auto-cleans old caches.'"
+    },
+    {
+      "severity": "MEDIUM",
+      "area": "Bundle Size Measurement Acceptance Criteria",
+      "issue": "Section 12 Task 1 specifies thresholds (AnalyticsTab 30KB, AssistantTab 25KB) but doesn't justify why, define acceptance criteria, or explain what to do if both are borderline (28KB + 24KB).",
+      "recommendation": "Add rationale: 'Main bundle target <180KB gzip; lazy-loaded chunks <35KB (acceptable 500ms delay on 3G). Acceptance: npm run build main bundle <=180KB gzip, tab click delay <1s on throttled 3G, LCP unchanged.' Clarify decision: if both tabs <25KB gzip, keep eager-loaded (no benefit to lazy-load)."
+    }
+  ],
+  "reviewDoc": "e:\\personal todo\\.agents\\tasks\\mobile-optimization\\design-review.md"
+}

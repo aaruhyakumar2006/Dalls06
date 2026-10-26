@@ -1,0 +1,7 @@
+{
+  "task_id": "task-core-data-features",
+  "task_description": "Implement three independent features for the Daily Planner: Undo/Redo system for user actions, Data Export in JSON/CSV/PDF formats, and Search & Filtering across all data.",
+  "status": "pending",
+  "feature_order": ["FEAT-001", "FEAT-002", "FEAT-003"],
+  "blocked_reason": null
+}

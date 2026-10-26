@@ -1,0 +1,45 @@
+{
+  "id": "FEAT-003",
+  "type": "feat",
+  "description": "Implement Search & Filtering feature. Create src/components/ui/SearchModal.tsx with real-time search (150ms debounce) across task titles, block labels, review items, checklist titles. Add filter options: status (done/not done), date range (today/this week/this month), block kind, category (tasks/blocks/reviews/checklists). Display results with match context. Add Ctrl+F / Cmd+F keyboard shortcut and search icon button in AppShell header and desktop rail.",
+  "status": "pending",
+  "steps": [
+    "Create src/components/ui/SearchModal.tsx. Define SearchFilter, SearchResult, SearchModalProps types.",
+    "Implement SearchModal component: modal with search input (auto-focus), filter dropdown selects (category, status, date range, block kind, clear button).",
+    "Implement search debounce: useState(query), useState(debouncedQuery), useEffect with 150ms setTimeout debounce logic.",
+    "Implement search algorithm in useMemo: iterate over tasks, reviewItems, checklistItems, templates. Case-insensitive substring match on debouncedQuery. Apply category filter (narrow to selected category). Apply status filter (done/not done for tasks and checklists). Apply date range filter (filter by date >= rangeStart). Apply blockKind filter (for blocks). Return SearchResult array with id, type, title, context (date, blockKind, reviewStage), matchedText.",
+    "Render results: Display 'X results found' count. For each result, show title, type badge, context (date, blockKind, etc.). Make each result clickable (no action required for MVP, just display).",
+    "Handle empty query: show 'Enter a search query to begin' message. Handle no results: show 'No results found for \"{query}\"' message.",
+    "Update src/components/layout/AppShell.tsx: Import SearchModal component. Add searchOpen useState. Add Ctrl+F / Cmd+F keyboard shortcut handler to existing global keyboard listener. Add search icon button in desktop left rail (near command palette). Add search icon button in mobile top bar. Render SearchModal at bottom with isOpen={searchOpen} onClose={() => setSearchOpen(false)}.",
+    "Test: Press Ctrl+F, verify SearchModal opens with focus on input. Type task title, verify matching tasks appear. Apply filters, verify results narrow. Test date range, status, block kind, category filters. Close modal. Test search icon buttons."
+  ],
+  "acceptance_criteria": [
+    "SearchModal component created and renders when isOpen=true",
+    "Search input auto-focuses when modal opens",
+    "Real-time search with 150ms debounce returns matching tasks, blocks, reviews, checklists",
+    "Results show match context (date, block kind, category, review stage)",
+    "Filter options work: status (done/not done), date range (today/this week/this month), block kind (core/heavy/soft/fixed), category (tasks/blocks/reviews/checklists)",
+    "Results narrow when filters applied; 'Clear Filters' button appears when any filter active",
+    "Match count displayed ('X results found')",
+    "Ctrl+F / Cmd+F keyboard shortcut opens SearchModal",
+    "Search icon button in desktop rail and mobile top bar opens SearchModal",
+    "Modal closes with close button or Escape key (implicit, modal backdrop)",
+    "No TypeScript build errors; `npm run build` succeeds"
+  ],
+  "verification": [
+    "npm run build — no TypeScript errors",
+    "npm run dev — dev server starts",
+    "Manual: Press Ctrl+F (or Cmd+F on Mac), verify SearchModal opens with focus on input",
+    "Manual: Type a task title substring, verify matching tasks appear with 'tasks' badge and date context",
+    "Manual: Apply status filter (Done), verify only completed tasks show",
+    "Manual: Apply category filter (Blocks), verify only block templates show",
+    "Manual: Apply date range filter (This Week), verify results narrowed to current week",
+    "Manual: Click 'Clear Filters', verify all categories appear again",
+    "Manual: Click search icon in desktop rail, verify modal opens",
+    "Manual: Click search icon in mobile top bar, verify modal opens",
+    "Manual: Type non-matching query, verify 'No results found' message",
+    "Manual: Clear query, verify 'Enter a search query' message"
+  ],
+  "blocked_reason": null,
+  "findings": ""
+}
