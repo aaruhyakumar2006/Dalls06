@@ -712,6 +712,22 @@ export default function AppShell({ children }: AppShellProps) {
             >
               <BarChart3 className="w-6 h-6" />
             </button>
+
+            {/* Tab 5: Review (RotateCw) */}
+            <button
+              onClick={() => setCurrentTab('review')}
+              aria-label="Review"
+              className={`flex flex-col items-center justify-center min-h-[44px] min-w-[44px] transition-colors relative ${
+                currentTab === 'review' ? 'text-primary' : 'text-gray-400'
+              }`}
+            >
+              <RotateCw className="w-6 h-6" />
+              {dueReviewItemsCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-primary text-white text-[10px] font-bold rounded-full min-w-[18px] h-[18px] flex items-center justify-center px-1">
+                  {dueReviewItemsCount}
+                </span>
+              )}
+            </button>
           </div>
         </nav>
 

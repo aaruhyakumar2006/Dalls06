@@ -76,6 +76,7 @@ interface PlannerContextType {
   user: any | null;
   isOnline: boolean;
   isLoaded: boolean;
+  isAuthChecked: boolean;
   syncStatus: 'synced' | 'syncing' | 'offline' | 'local_only';
   syncInProgress: boolean;
   lastSyncTime: number | null;
@@ -199,6 +200,7 @@ const STORAGE_KEY = 'daily-planner-v2-state';
 
 export function PlannerProvider({ children }: { children: React.ReactNode }) {
   const [isLoaded, setIsLoaded] = useState(false);
+  const [isAuthChecked, setIsAuthChecked] = useState(false);
   const [user, setUser] = useState<any | null>(null);
   const [isOnline, setIsOnline] = useState(true);
   const [syncStatus, setSyncStatus] = useState<'synced' | 'syncing' | 'offline' | 'local_only'>('local_only');
@@ -502,6 +504,7 @@ export function PlannerProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (!isSupabaseConfigured()) {
       setSyncStatus('local_only');
+      setIsAuthChecked(true);
       return;
     }
 
@@ -517,6 +520,7 @@ export function PlannerProvider({ children }: { children: React.ReactNode }) {
         setUser(null);
         setSyncStatus('local_only');
       }
+      setIsAuthChecked(true);
     });
 
     const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
@@ -1614,6 +1618,7 @@ export function PlannerProvider({ children }: { children: React.ReactNode }) {
         user,
         isOnline,
         isLoaded,
+        isAuthChecked,
         syncStatus,
         syncInProgress,
         lastSyncTime,

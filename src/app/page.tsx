@@ -14,12 +14,28 @@ import { ShuttleIcon } from '@/components/ui/Icons';
 
 export default function HomePage() {
   const { currentTab } = useContext(AppTabContext);
-  const { user, isLoaded } = usePlanner();
+  const { user, isLoaded, isAuthChecked } = usePlanner();
   const [showAuthPrompt, setShowAuthPrompt] = useState(true);
+
+  // Show loading screen while localStorage or auth state is being checked
+  if (!isLoaded || !isAuthChecked) {
+    return (
+      <div className="min-h-screen bg-bg text-ink flex flex-col items-center justify-center p-4">
+        <div className="w-full max-w-md space-y-6 text-center">
+          <div className="flex justify-center">
+            <div className="w-16 h-16 rounded-2xl bg-court border-2 border-ink flex items-center justify-center text-white shadow-sticker animate-pulse">
+              <ShuttleIcon className="w-8 h-8 text-shuttle" />
+            </div>
+          </div>
+          <p className="text-lg font-medium text-ink">Loading your workspace...</p>
+        </div>
+      </div>
+    );
+  }
 
   // Show auth gate if not authenticated (unless local-only mode)
   // Allow user to skip and use locally
-  if (isLoaded && !user && showAuthPrompt) {
+  if (isLoaded && isAuthChecked && !user && showAuthPrompt) {
     return (
       <div className="min-h-screen bg-bg text-ink flex flex-col items-center justify-center p-4">
         <div className="w-full max-w-md space-y-6 text-center">
