@@ -199,6 +199,9 @@ const PlannerContext = createContext<PlannerContextType | null>(null);
 const STORAGE_KEY = 'daily-planner-v2-state';
 
 export function PlannerProvider({ children }: { children: React.ReactNode }) {
+  // IMPORTANT: isLoaded and isAuthChecked MUST start as false on both server and client
+  // to prevent hydration mismatches. The loading screen in page.tsx relies on this
+  // consistent initial state to render the same content during SSR and initial client render.
   const [isLoaded, setIsLoaded] = useState(false);
   const [isAuthChecked, setIsAuthChecked] = useState(false);
   const [user, setUser] = useState<any | null>(null);

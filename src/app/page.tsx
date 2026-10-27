@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { usePlanner } from '@/lib/storage/store';
 import { AppTabContext } from '@/components/layout/AppShell';
 import TodayTab from '@/components/tabs/TodayTab';
@@ -16,11 +16,18 @@ export default function HomePage() {
   const { currentTab } = useContext(AppTabContext);
   const { user, isLoaded, isAuthChecked } = usePlanner();
   const [showAuthPrompt, setShowAuthPrompt] = useState(true);
+  const [mounted, setMounted] = useState(false);
+
+  // Ensure client-only rendering after mount to prevent hydration mismatch
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Show loading screen while localStorage or auth state is being checked
-  if (!isLoaded || !isAuthChecked) {
+  // suppressHydrationWarning prevents hydration mismatch for intentional loading state
+  if (!mounted || !isLoaded || !isAuthChecked) {
     return (
-      <div className="min-h-screen bg-bg text-ink flex flex-col items-center justify-center p-4">
+      <div className="min-h-screen bg-bg text-ink flex flex-col items-center justify-center p-4" suppressHydrationWarning>
         <div className="w-full max-w-md space-y-6 text-center">
           <div className="flex justify-center">
             <div className="w-16 h-16 rounded-2xl bg-court border-2 border-ink flex items-center justify-center text-white shadow-sticker animate-pulse">
@@ -37,7 +44,7 @@ export default function HomePage() {
   // Allow user to skip and use locally
   if (isLoaded && isAuthChecked && !user && showAuthPrompt) {
     return (
-      <div className="min-h-screen bg-bg text-ink flex flex-col items-center justify-center p-4">
+      <div className="min-h-screen bg-bg text-ink flex flex-col items-center justify-center p-4" suppressHydrationWarning>
         <div className="w-full max-w-md space-y-6 text-center">
           <div className="flex justify-center">
             <div className="w-16 h-16 rounded-2xl bg-court border-2 border-ink flex items-center justify-center text-white shadow-sticker">
