@@ -248,7 +248,7 @@ export default function AppShell({ children }: AppShellProps) {
 
   if (!mounted || !isLoaded) {
     return (
-      <div className="min-h-screen bg-bg text-ink flex items-center justify-center p-4">
+      <div className="min-h-screen bg-bg text-ink flex items-center justify-center p-4" suppressHydrationWarning>
         <div className="flex flex-col items-center gap-4 text-center">
           <div className="w-16 h-16 rounded-full bg-primary flex items-center justify-center text-white font-bold text-2xl font-display shadow-lg animate-bounce">
             D
